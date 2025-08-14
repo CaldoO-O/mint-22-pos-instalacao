@@ -249,7 +249,7 @@ install_wine_lutris() {
 show_menu() {
     clear
     echo "================================================="
-    echo "    Script de Instalação para Linux Mint 22.2"
+    echo "    Script de Instalação para Linux Mint 22.X"
     echo "================================================="
     echo "  Selecione uma ou mais opções (ex: 1 3 5):"
     echo "-------------------------------------------------"
@@ -258,10 +258,10 @@ show_menu() {
     echo "  3) Instalar VSCode"
     echo "  4) Instalar Fastfetch"
     echo "  5) Instalar Docker e Docker Desktop"
-    echo "  6) Instalar Flatseal (Flatpak)"
-    echo "  7) Instalar Vesktop (Flatpak)"
+    echo "  6) Instalar Flatseal (Gerenciador de permissões para Flatpak)"
+    echo "  7) Instalar Vesktop (Versão melhorada do Discord para Flatpak)"
     echo "  8) Instalar ROS 2 Kilted Desktop (para robótica)"
-    echo "  9) Instalar WineHQ, Vulkan e Lutris (para jogos)"
+    echo "  9) Instalar WineHQ, Vulkan e Lutris (para usar apps do Windows e rodar jogos)"
     echo "-------------------------------------------------"
     echo "  10) Fazer TUDO"
     echo "  0) Sair"
