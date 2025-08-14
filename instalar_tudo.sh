@@ -298,7 +298,7 @@ show_menu() {
     echo "  5) Instalar Docker e Docker Desktop"
     echo "  6) Instalar Flatseal (Flatpak)"
     echo "  7) Instalar Vesktop (Flatpak)"
-    echo "  8) Instalar ROS 2 Jazzy Desktop (para robótica)"
+    echo "  8) Instalar ROS 2 Kilted Desktop (para robótica)"
     echo "  9) Instalar WineHQ, Vulkan e Lutris (para jogos)"
     echo "  10) Instalar ESP-IDF v5.2 (para microcontroladores)"
     echo "-------------------------------------------------"
