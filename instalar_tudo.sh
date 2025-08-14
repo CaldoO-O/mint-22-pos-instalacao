@@ -152,7 +152,7 @@ install_docker() {
     msg "Configurando Docker..."
     systemctl enable --now docker
     groupadd docker
-    usermod -aG docker $USER
+    usermod -aG docker $SUDO_USER
     
     msg "Docker Engine instalado e configurado! Você precisará sair e logar novamente para usar Docker sem sudo."
 
