@@ -245,25 +245,64 @@ install_wine_lutris() {
     msg "WineHQ, Vulkan e Lutris instalados com sucesso!"
 }
 
+# 10) Instalar ESP-IDF v5.2
+install_esp_idf() {
+    msg "Iniciando a instalação do ESP-IDF v5.2..."
+
+    # Define os caminhos e garante que a pasta Projects exista e pertença ao usuário
+    local PROJECTS_DIR="$USER_HOME/Projects"
+    local ESP_DIR="$PROJECTS_DIR/esp-idf"
+    
+    msg "Verificando e criando a pasta '$PROJECTS_DIR' se necessário..."
+    # O -p evita erro se a pasta já existir.
+    mkdir -p "$PROJECTS_DIR"
+    # IMPORTANTE: Garante que o usuário normal seja o dono da pasta, não o root.
+    chown $SUDO_USER:$SUDO_USER "$PROJECTS_DIR"
+
+    # Instala as dependências necessárias que o ESP-IDF exige
+    msg "Instalando dependências do sistema para o ESP-IDF..."
+    apt install git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0 -y
+
+    # Verifica se o ESP-IDF já foi clonado para não fazer de novo
+    if [ -d "$ESP_DIR" ]; then
+        warning "A pasta '$ESP_DIR' já existe. Pulando o download."
+    else
+        msg "Clonando o repositório do ESP-IDF v5.2... Isso pode demorar bastante."
+        # Executa o git clone como o usuário normal para evitar problemas de permissão
+        sudo -u $SUDO_USER git clone -b v5.2 --recursive https://github.com/espressif/esp-idf.git "$ESP_DIR"
+    fi
+
+    msg "Executando o script de instalação do ESP-IDF (baixando ferramentas)..."
+    # O script de instalação também deve ser executado pelo usuário
+    sudo -u $SUDO_USER "$ESP_DIR/install.sh" esp32
+
+    if [ $? -eq 0 ]; then
+        msg "ESP-IDF v5.2 instalado e configurado com sucesso!"
+    else
+        error "Ocorreu um erro durante a configuração do ESP-IDF."
+    fi
+}
+
 # --- Menu Principal ---
 show_menu() {
     clear
     echo "================================================="
-    echo "    Script de Instalação para Linux Mint 22.X"
+    echo "    Script de Instalação para Linux Mint 22.2"
     echo "================================================="
     echo "  Selecione uma ou mais opções (ex: 1 3 5):"
     echo "-------------------------------------------------"
     echo "  1) Atualizar o Sistema"
-    echo "  2) Instalar Driver NVIDIA"
+    echo "  2) Instalar Driver NVIDIA (via Repositório)"
     echo "  3) Instalar VSCode"
     echo "  4) Instalar Fastfetch"
     echo "  5) Instalar Docker e Docker Desktop"
-    echo "  6) Instalar Flatseal (Gerenciador de permissões para Flatpak)"
-    echo "  7) Instalar Vesktop (Versão melhorada do Discord para Flatpak)"
-    echo "  8) Instalar ROS 2 Kilted Desktop (para robótica)"
-    echo "  9) Instalar WineHQ, Vulkan e Lutris (para usar apps do Windows e rodar jogos)"
+    echo "  6) Instalar Flatseal (Flatpak)"
+    echo "  7) Instalar Vesktop (Flatpak)"
+    echo "  8) Instalar ROS 2 Jazzy Desktop (para robótica)"
+    echo "  9) Instalar WineHQ, Vulkan e Lutris (para jogos)"
+    echo "  10) Instalar ESP-IDF v5.2 (para microcontroladores)"
     echo "-------------------------------------------------"
-    echo "  10) Fazer TUDO"
+    echo "  11) Instalar TUDO"
     echo "  0) Sair"
     echo "================================================="
 }
@@ -277,8 +316,10 @@ while true; do
         break
     fi
 
-    if [[ "$choices" == "10" ]]; then
-        choices="1 2 3 4 5 6 7 8 9"
+    # Atualizado para a opção 11
+    if [[ "$choices" == "11" ]]; then
+        # Adicionado o 10 na lista
+        choices="1 2 3 4 5 6 7 8 9 10"
     fi
 
     for choice in $choices; do
@@ -290,11 +331,15 @@ while true; do
             5) install_docker ;;
             6) install_flatseal ;;
             7) install_vesktop ;;
-            8) install_ros2 ;;
+            8) install_ros2 ;; # Lembre-se de usar a versão recomendada (Jazzy)
             9) install_wine_lutris ;;
+            10) install_esp_idf ;; # Nova opção adicionada
             *) warning "Opção inválida: $choice" ;;
         esac
-        read -p "Pressione [Enter] para continuar..."
+        # Adicionei uma pausa apenas se não for a opção "TUDO"
+        if [[ ! "$choices" =~ ^11$ ]]; then
+            read -p "Pressione [Enter] para continuar..."
+        fi
     done
 
     if [[ ! "$choices" =~ [0] ]]; then
