@@ -1,2 +1,2 @@
-# Linux Mint 22.X Quick Setup Shell Script
-Quick configuration shell script for convenience.
+# Linux Mint 22.X Shell Script de Pós Instalação
+Configuração rápida para maior conveniência.
